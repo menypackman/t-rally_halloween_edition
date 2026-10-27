@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T-RALLY Halloween Edition - Estación Final</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Fira+Code:wght@400;600;700&family=Orbitron:wght@700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyberBlack: '#050505',
+                        darkBg: '#0d0d0d',
+                        acidGreen: '#39ff14',
+                        neonGreen: '#22c55e',
+                        cyberPurple: '#a855f7',
+                        darkPurple: '#7e22ce',
+                        hackerOrange: '#ff6b00',
+                        brightOrange: '#f97316',
+                        alertRed: '#ff0033'
+                    },
+                    fontFamily: {
+                        spooky: ['Creepster', 'cursive'],
+                        cyber: ['Orbitron', 'sans-serif'],
+                        tech: ['Rajdhani', 'sans-serif'],
+                        code: ['Fira Code', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050505;
+            color: #f8fafc;
+            overflow-x: hidden;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        /* Ambient Cyber & Halloween Grid Background */
+        .bg-cyber-grid {
+            background-image: 
+                radial-gradient(circle at 50% 25%, rgba(168, 85, 247, 0.18) 0%, transparent 65%),
+                radial-gradient(circle at 80% 80%, rgba(57, 255, 20, 0.12) 0%, transparent 55%),
+                radial-gradient(circle at 10% 85%, rgba(255, 107, 0, 0.1) 0%, transparent 50%),
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+        }
+
+        /* Glowing Neon Text Effects */
+        .neon-text-green {
+            color: #39ff14;
+            text-shadow: 0 0 10px rgba(57, 255, 20, 0.8), 0 0 25px rgba(57, 255, 20, 0.5), 0 0 40px rgba(57, 255, 20, 0.3);
+        }
+
+        .neon-text-orange {
+            color: #ff6b00;
+            text-shadow: 0 0 10px rgba(255, 107, 0, 0.8), 0 0 25px rgba(255, 107, 0, 0.5);
+        }
+
+        .neon-text-purple {
+            color: #c084fc;
+            text-shadow: 0 0 10px rgba(168, 85, 247, 0.8), 0 0 25px rgba(168, 85, 247, 0.5);
+        }
+
+        /* Border Glows */
+        .neon-border-green {
+            box-shadow: 0 0 20px rgba(57, 255, 20, 0.4), inset 0 0 15px rgba(57, 255, 20, 0.15);
+            border-color: #39ff14;
+        }
+
+        .neon-border-purple {
+            box-shadow: 0 0 25px rgba(168, 85, 247, 0.35), inset 0 0 15px rgba(168, 85, 247, 0.15);
+            border-color: #a855f7;
+        }
+
+        .neon-border-red {
+            box-shadow: 0 0 30px rgba(255, 0, 51, 0.6), inset 0 0 20px rgba(255, 0, 51, 0.3);
+            border-color: #ff0033;
+        }
+
+        /* Spooky Canvas Overlay */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Slime Drip Details */
+        .slime-drip {
+            position: relative;
+        }
+        .slime-drip::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 25%;
+            width: 14px;
+            height: 20px;
+            background: #39ff14;
+            border-radius: 0 0 50% 50%;
+            box-shadow: 0 0 10px #39ff14;
+            animation: drip 2.8s infinite ease-in-out;
+        }
+
+        @keyframes drip {
+            0%, 100% { transform: translateY(0) scaleY(1); }
+            50% { transform: translateY(10px) scaleY(1.3); }
+        }
+
+        /* Pulse Animations */
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.85; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.02); }
+        }
+
+        .animate-pulse-glow {
+            animation: pulseGlow 2.5s infinite ease-in-out;
+        }
+
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050505;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #a855f7;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="bg-cyber-grid min-h-screen flex flex-col justify-between items-center relative p-4 md:p-6 select-none">
+
+    <!-- Canvas para murciélagos, código Matrix y polvo neón -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Top Navigation Header -->
+    <header class="w-full max-w-4xl flex justify-between items-center z-20 mb-4 px-2">
+        <div class="flex items-center space-x-2 bg-black/70 border border-purple-500/40 rounded-full px-4 py-1.5 backdrop-blur-md">
+            <span id="status-dot" class="w-3 h-3 rounded-full bg-acidGreen animate-ping"></span>
+            <span class="text-xs font-code text-gray-300 tracking-wider">STATUS: <span id="system-status-text" class="text-acidGreen font-bold">ESTACIÓN ACTIVA</span></span>
+        </div>
+
+        <div class="flex items-center space-x-3">
+            <!-- Audio Toggle Button -->
+            <button id="sound-toggle-btn" title="Activar/Desactivar sonido" class="bg-black/70 hover:bg-purple-900/40 border border-purple-500/50 text-purple-300 p-2.5 rounded-full transition-all text-sm flex items-center justify-center w-10 h-10 shadow-lg">
+                <i class="fas fa-volume-high" id="sound-icon"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN INTERFACE -->
+    <main class="w-full max-w-2xl z-20 my-auto flex flex-col items-center">
+        
+        <!-- HEADER LOGO (Basado en la imagen de IT-RALLY HALLOWEEN EDITION) -->
+        <div class="text-center mb-6 relative group">
+            <div class="absolute -top-12 left-1/2 -translate-x-1/2 w-52 h-52 bg-purple-600/20 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="inline-block relative">
+                <!-- Iconos de Dron y Araña decorativos -->
+                <i class="fas fa-spider text-purple-400 text-2xl absolute -left-8 top-1 animate-bounce"></i>
+                <i class="fas fa-drone text-acidGreen text-xl absolute -right-9 -top-3 animate-pulse"></i>
+
+                <h1 class="font-cyber text-4xl sm:text-6xl md:text-7xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-b from-acidGreen via-neonGreen to-emerald-600 drop-shadow-[0_5px_18px_rgba(57,255,20,0.65)] uppercase slime-drip">
+                    T-RALLY
+                </h1>
+            </div>
+            
+            <div class="mt-1 flex items-center justify-center space-x-2">
+                <span class="text-purple-400 font-code font-bold text-lg">&lt;/&gt;</span>
+                <h2 class="font-spooky text-2xl sm:text-4xl text-hackerOrange tracking-widest neon-text-orange transform -rotate-1">
+                    HALLOWEEN EDITION
+                </h2>
+                <span class="text-purple-400 font-code font-bold text-lg">&lt;/&gt;</span>
+            </div>
+
+            <div class="mt-2 inline-block bg-purple-950/80 border border-purple-500/50 text-purple-200 text-xs sm:text-sm font-code px-4 py-1 rounded-md backdrop-blur-md">
+                <span>🏁 ESTACIÓN FINAL: LABORATORIO DEL DR. CHAPARROESTEIN</span>
+            </div>
+        </div>
+
+        <!-- ESTADO 1: FORMULARIO ACTIVO -->
+        <div id="challenge-card" class="w-full bg-black/85 border-2 border-purple-500/60 rounded-2xl p-6 md:p-8 backdrop-blur-xl neon-border-purple transition-all duration-500 relative overflow-hidden">
+            
+            <!-- Adornos en esquinas -->
+            <div class="absolute top-0 right-0 p-3 opacity-30 text-purple-400 pointer-events-none">
+                <i class="fas fa-spider-web text-4xl"></i>
+            </div>
+            <div class="absolute bottom-0 left-0 p-3 opacity-20 text-acidGreen pointer-events-none">
+                <i class="fas fa-microchip text-3xl"></i>
+            </div>
+
+            <p class="text-gray-300 text-center text-sm md:text-base mb-6 font-tech font-semibold">
+                Ingresen la clave secreta descubierta en las estaciones del rally. <br class="hidden sm:inline">
+                <span class="text-acidGreen font-bold">¡El primer equipo que valide la clave descifrará el núcleo y cerrará la estación!</span>
+            </p>
+
+            <form id="rally-form" class="space-y-5">
+                <!-- Nombre del Equipo -->
+                <div>
+                    <label for="team-name" class="block text-xs font-code text-purple-300 uppercase mb-2 tracking-wider">
+                        <i class="fas fa-users text-acidGreen mr-1.5"></i>Nombre del Equipo
+                    </label>
+                    <div class="relative">
+                        <input type="text" id="team-name" required placeholder="Ej. Cyber Hackers" 
+                            class="w-full bg-gray-950/90 border border-purple-500/50 focus:border-acidGreen text-green-300 placeholder-gray-600 rounded-xl px-4 py-3 text-base font-code outline-none transition-all duration-300 focus:ring-2 focus:ring-acidGreen/40">
+                        <i class="fas fa-ghost absolute right-4 top-1/2 -translate-y-1/2 text-purple-400/50"></i>
+                    </div>
+                </div>
+
+                <!-- Contraseña Final -->
+                <div>
+                    <label for="final-password" class="block text-xs font-code text-purple-300 uppercase mb-2 tracking-wider">
+                        <i class="fas fa-key text-hackerOrange mr-1.5"></i>Clave Maestra Final
+                    </label>
+                    <div class="relative">
+                        <input type="password" id="final-password" required placeholder="••••••••••••" 
+                            class="w-full bg-gray-950/90 border border-purple-500/50 focus:border-hackerOrange text-orange-400 placeholder-gray-600 rounded-xl px-4 py-3 text-base font-code outline-none transition-all duration-300 focus:ring-2 focus:ring-hackerOrange/40">
+                        <button type="button" id="toggle-pwd-btn" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300">
+                            <i class="fas fa-eye" id="pwd-eye-icon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mensaje de Error -->
+                <div id="error-message" class="hidden bg-red-950/80 border border-red-500/60 text-red-300 text-xs md:text-sm font-code p-3 rounded-lg text-center flex items-center justify-center space-x-2">
+                    <i class="fas fa-triangle-exclamation text-red-400 text-base"></i>
+                    <span id="error-text">Contraseña incorrecta. Revisen sus pistas.</span>
+                </div>
+
+                <!-- Botón de Envío -->
+                <button type="submit" id="submit-btn" class="w-full group relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-cyber font-bold rounded-xl group bg-gradient-to-br from-acidGreen via-emerald-500 to-purple-600 group-hover:from-acidGreen group-hover:to-purple-500 hover:text-white text-black shadow-lg shadow-green-500/30 transition-all duration-300 active:scale-95">
+                    <span class="w-full relative px-6 py-4 transition-all ease-in duration-75 bg-black rounded-[10px] group-hover:bg-opacity-0 text-acidGreen group-hover:text-black font-extrabold text-base md:text-lg tracking-wider flex items-center justify-center space-x-2">
+                        <i class="fas fa-terminal"></i>
+                        <span>VALIDAR CLAVE</span>
+                    </span>
+                </button>
+            </form>
+        </div>
+
+        <!-- ESTADO 2: PANTALLA DE VICTORIA -->
+        <div id="success-card" class="hidden w-full bg-black/90 border-2 border-acidGreen rounded-2xl p-6 md:p-8 backdrop-blur-xl neon-border-green transition-all duration-500 text-center relative overflow-hidden animate-pulse-glow">
+            <div class="absolute -top-10 -right-10 text-acidGreen/10 text-9xl font-cyber select-none">WIN</div>
+            
+            <div class="w-20 h-20 bg-acidGreen/20 border-2 border-acidGreen rounded-full flex items-center justify-center mx-auto mb-4 text-acidGreen text-3xl shadow-[0_0_20px_rgba(57,255,20,0.5)]">
+                <i class="fas fa-trophy animate-bounce"></i>
+            </div>
+
+            <h2 class="font-cyber text-3xl md:text-4xl text-acidGreen font-black tracking-wide mb-2 neon-text-green uppercase">
+                🎉 ¡MISIÓN CUMPLIDA! 🎉
+            </h2>
+            <p class="font-spooky text-2xl text-hackerOrange mb-4 tracking-widest">¡CONTRASEÑA DESCIFRADA CON ÉXITO!</p>
+
+            <div class="bg-gray-950/90 border border-purple-500/40 rounded-xl p-4 mb-6">
+                <p class="text-xs font-code text-gray-400 uppercase tracking-widest mb-1">EQUIPO GANADOR</p>
+                <p id="winner-name-display" class="font-cyber text-2xl md:text-3xl text-purple-300 font-bold neon-text-purple break-words">--</p>
+                <p id="winner-time-display" class="text-xs font-code text-acidGreen mt-2">REGISTRADO: --:--:--</p>
+            </div>
+
+            <div class="bg-purple-950/40 border border-purple-500/30 rounded-lg p-3 text-xs font-code text-purple-200">
+                <i class="fas fa-lock text-acidGreen mr-1"></i> La estación se ha cerrado en tiempo real para todos los equipos.
+            </div>
+        </div>
+
+        <!-- ESTADO 3: PANTALLA DE BLOQUEO PERMANENTE -->
+        <div id="locked-card" class="hidden w-full bg-black/95 border-2 border-red-600 rounded-2xl p-6 md:p-8 backdrop-blur-xl neon-border-red transition-all duration-500 text-center relative overflow-hidden">
+            <div class="w-20 h-20 bg-red-950/60 border-2 border-red-500 rounded-full flex items-center justify-center mx-auto mb-4 text-red-500 text-3xl shadow-[0_0_25px_rgba(255,0,51,0.7)] animate-pulse">
+                <i class="fas fa-lock text-red-500"></i>
+            </div>
+
+            <h2 class="font-cyber text-2xl md:text-4xl text-red-500 font-black tracking-wider mb-1 uppercase">
+                🔒 ESTACIÓN BLOQUEADA 🔒
+            </h2>
+            <p class="font-code text-xs text-red-400 mb-6 tracking-widest uppercase">ACCESO DENEGADO - OTRO EQUIPO SE HA ADELANTADO</p>
+
+            <div class="bg-gray-950/90 border border-red-900/60 rounded-xl p-4 mb-6">
+                <p class="text-xs font-code text-gray-500 uppercase tracking-widest mb-1">COMPLETADO POR EL EQUIPO:</p>
+                <p id="locked-winner-display" class="font-cyber text-xl md:text-2xl text-hackerOrange font-bold neon-text-orange break-words">--</p>
+                <p id="locked-time-display" class="text-xs font-code text-gray-400 mt-2">TIEMPO DE REGISTRO: --</p>
+            </div>
+
+            <p class="text-sm font-tech text-gray-400">
+                Esta estación ha sido completada y cerrada. ¡Gracias por participar en el IT-RALLY!
+            </p>
+        </div>
+
+    </main>
+
+    <!-- FOOTER INFO -->
+    <footer class="w-full max-w-4xl text-center z-20 mt-6 pt-4 border-t border-purple-900/30 flex flex-col sm:flex-row justify-between items-center text-xs text-gray-500 font-code">
+        <div>IT-RALLY HALLOWEEN EDITION &copy; 2026</div>
+        <div class="mt-2 sm:mt-0 flex items-center space-x-2">
+            <span class="text-purple-400">CLAVE CONFIGURADA:</span>
+            <span id="master-key-hint" class="bg-black/60 border border-purple-800/40 px-2 py-0.5 rounded text-gray-400">CYBER_HALLOWEEN_2026</span>
+        </div>
+    </footer>
+
+    <!-- MODAL DE ADMINISTRACIÓN OCULTO (Accesible solo con combinación de teclas) -->
+    <div id="admin-modal" class="hidden fixed inset-0 bg-black/95 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="bg-gray-950 border-2 border-purple-500 rounded-2xl max-w-md w-full p-6 text-center shadow-2xl relative neon-border-purple">
+            <button id="close-admin-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i class="fas fa-times text-lg"></i>
+            </button>
+            <div class="w-12 h-12 bg-purple-900/40 border border-purple-500 rounded-full flex items-center justify-center mx-auto mb-3 text-purple-300">
+                <i class="fas fa-user-shield text-xl"></i>
+            </div>
+            <h3 class="font-cyber text-lg text-purple-400 mb-1">PANEL DE CONTROL ADMIN</h3>
+            <p class="text-xs font-code text-gray-400 mb-4">Solo para organizadores. Ingrese el PIN para realizar cambios.</p>
+
+            <div class="space-y-3 mb-4 text-left">
+                <div>
+                    <label class="text-xs font-code text-purple-300 block mb-1">1. PIN de Administrador (Por defecto: 1234)</label>
+                    <input type="password" id="admin-pin-input" placeholder="Ingrese PIN admin..." class="w-full bg-black border border-purple-800/80 rounded px-3 py-2 font-code text-sm text-white focus:border-acidGreen outline-none">
+                </div>
+                <div>
+                    <label class="text-xs font-code text-purple-300 block mb-1">2. Nueva Contraseña Maestra</label>
+                    <input type="text" id="admin-new-password" placeholder="Ej. CYBER_HALLOWEEN_2026" class="w-full bg-black border border-purple-800/80 rounded px-3 py-2 font-code text-sm text-acidGreen focus:border-acidGreen outline-none">
+                </div>
+                <div>
+                    <label class="text-xs font-code text-purple-300 block mb-1">3. Cambiar PIN de Admin (Opcional)</label>
+                    <input type="password" id="admin-new-pin" placeholder="Nuevo PIN..." class="w-full bg-black border border-purple-800/80 rounded px-3 py-2 font-code text-sm text-hackerOrange focus:border-hackerOrange outline-none">
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2">
+                <button id="reset-station-btn" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-code text-xs font-bold py-2.5 rounded-lg transition-all">
+                    <i class="fas fa-rotate-left mr-1"></i> REINICIAR ESTACIÓN
+                </button>
+                <button id="save-settings-btn" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-code text-xs font-bold py-2.5 rounded-lg transition-all">
+                    <i class="fas fa-floppy-disk mr-1"></i> GUARDAR CAMBIOS
+                </button>
+            </div>
+            <p id="admin-msg" class="text-xs font-code mt-3 hidden"></p>
+        </div>
+    </div>
+
+    <!-- SCRIPT DE LÓGICA Y SINCRONIZACIÓN -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // APP CONFIG & INITIAL VALUES
+        let MASTER_PASSWORD = "CYBER_HALLOWEEN_2026";
+        let ADMIN_PIN = "1234";
+
+        // CANAL DE SINCRONIZACIÓN EN TIEMPO REAL ENTRE PESTAÑAS (Broadcast Channel API)
+        const broadcastChannel = new BroadcastChannel('itrally_realtime_sync');
+
+        // FIREBASE SETUP
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'itrally-halloween-final-2026';
+        let db = null;
+        let auth = null;
+        let isFirebaseAvailable = false;
+
+        // SINTETIZADOR DE AUDIO (Web Audio API)
+        class CyberSoundEffects {
+            constructor() {
+                this.ctx = null;
+                this.muted = false;
+            }
+
+            init() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+            }
+
+            playSuccess() {
+                if (this.muted) return;
+                this.init();
+                const now = this.ctx.currentTime;
+                
+                const freqs = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+                freqs.forEach((freq, idx) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+                    
+                    gain.gain.setValueAtTime(0.2, now + idx * 0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.3);
+                    
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    
+                    osc.start(now + idx * 0.08);
+                    osc.stop(now + idx * 0.08 + 0.3);
+                });
+            }
+
+            playError() {
+                if (this.muted) return;
+                this.init();
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(200, now);
+                osc.frequency.exponentialRampToValueAtTime(70, now + 0.3);
+                
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                
+                osc.start(now);
+                osc.stop(now + 0.3);
+            }
+
+            playLockout() {
+                if (this.muted) return;
+                this.init();
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(450, now);
+                osc.frequency.setValueAtTime(850, now + 0.15);
+                osc.frequency.setValueAtTime(350, now + 0.3);
+                
+                gain.gain.setValueAtTime(0.25, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                
+                osc.start(now);
+                osc.stop(now + 0.5);
+            }
+        }
+
+        const audioFX = new CyberSoundEffects();
+
+        // CANVAS DE PARTÍCULAS (Matriz verde, murciélagos y polvo neón)
+        function initParticles() {
+            const canvas = document.getElementById('particle-canvas');
+            const ctx = canvas.getContext('2d');
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            const particles = Array.from({ length: 40 }, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2 + 1,
+                speedY: Math.random() * 0.9 + 0.3,
+                speedX: (Math.random() - 0.5) * 0.6,
+                color: Math.random() > 0.4 ? '#39ff14' : (Math.random() > 0.5 ? '#a855f7' : '#ff6b00'),
+                char: ['0', '1', '</>', '{ }', '🦇', '🕷️', '💻'][Math.floor(Math.random() * 7)]
+            }));
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                particles.forEach(p => {
+                    p.y += p.speedY;
+                    p.x += p.speedX;
+
+                    if (p.y > canvas.height) {
+                        p.y = -20;
+                        p.x = Math.random() * canvas.width;
+                    }
+
+                    ctx.fillStyle = p.color;
+                    ctx.font = `${11 + p.size * 3}px 'Fira Code', monospace`;
+                    ctx.globalAlpha = 0.45;
+                    ctx.fillText(p.char, p.x, p.y);
+                });
+
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+        initParticles();
+
+        // ELEMENTOS DOM PARA CAMBIO DE ESTADOS
+        const challengeCard = document.getElementById('challenge-card');
+        const successCard = document.getElementById('success-card');
+        const lockedCard = document.getElementById('locked-card');
+        const systemStatusText = document.getElementById('system-status-text');
+        const statusDot = document.getElementById('status-dot');
+
+        function updateUIState(stateData) {
+            if (stateData && stateData.isLocked) {
+                challengeCard.classList.add('hidden');
+                
+                const storedWinner = localStorage.getItem('itrally_winner_name');
+                if (storedWinner && storedWinner === stateData.winnerName) {
+                    successCard.classList.remove('hidden');
+                    lockedCard.classList.add('hidden');
+                    document.getElementById('winner-name-display').textContent = stateData.winnerName;
+                    document.getElementById('winner-time-display').textContent = `REGISTRADO: ${stateData.completedAt || 'AHORA'}`;
+                } else {
+                    lockedCard.classList.remove('hidden');
+                    successCard.classList.add('hidden');
+                    document.getElementById('locked-winner-display').textContent = stateData.winnerName;
+                    document.getElementById('locked-time-display').textContent = `TIEMPO REGISTRADO: ${stateData.completedAt || 'N/A'}`;
+                }
+
+                systemStatusText.textContent = "ESTACIÓN BLOQUEADA";
+                systemStatusText.className = "text-red-500 font-bold";
+                statusDot.className = "w-3 h-3 rounded-full bg-red-500 animate-pulse";
+            } else {
+                challengeCard.classList.remove('hidden');
+                successCard.classList.add('hidden');
+                lockedCard.classList.add('hidden');
+
+                systemStatusText.textContent = "ESTACIÓN ACTIVA";
+                systemStatusText.className = "text-acidGreen font-bold";
+                statusDot.className = "w-3 h-3 rounded-full bg-acidGreen animate-ping";
+            }
+        }
+
+        // SINCRONIZACIÓN FIRESTORE / LOCALSTORAGE
+        async function setupFirebase() {
+            try {
+                if (typeof __firebase_config !== 'undefined' && __firebase_config) {
+                    const firebaseConfig = JSON.parse(__firebase_config);
+                    const app = initializeApp(firebaseConfig);
+                    db = getFirestore(app);
+                    auth = getAuth(app);
+
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+
+                    isFirebaseAvailable = true;
+
+                    const stationDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'rally_state', 'station_final');
+
+                    onSnapshot(stationDocRef, (docSnap) => {
+                        if (docSnap.exists()) {
+                            const data = docSnap.data();
+                            if (data.masterPassword) {
+                                MASTER_PASSWORD = data.masterPassword;
+                                document.getElementById('master-key-hint').textContent = MASTER_PASSWORD;
+                            }
+                            if (data.adminPin) ADMIN_PIN = data.adminPin;
+                            updateUIState(data);
+                        } else {
+                            updateUIState({ isLocked: false });
+                        }
+                    }, (error) => {
+                        console.warn("Error en Firestore snapshot, fallback local:", error);
+                        useLocalStateFallback();
+                    });
+                } else {
+                    useLocalStateFallback();
+                }
+            } catch (err) {
+                console.warn("Fallo al conectar con Firebase, usando LocalStorage fallback:", err);
+                useLocalStateFallback();
+            }
+        }
+
+        function useLocalStateFallback() {
+            isFirebaseAvailable = false;
+            const savedState = localStorage.getItem('itrally_local_state');
+            if (savedState) {
+                const parsed = JSON.parse(savedState);
+                if (parsed.masterPassword) {
+                    MASTER_PASSWORD = parsed.masterPassword;
+                    document.getElementById('master-key-hint').textContent = MASTER_PASSWORD;
+                }
+                if (parsed.adminPin) ADMIN_PIN = parsed.adminPin;
+                updateUIState(parsed);
+            } else {
+                updateUIState({ isLocked: false });
+            }
+        }
+
+        // Escuchar BroadcastChannel para sincronizar entre pestañas del mismo navegador en tiempo real
+        broadcastChannel.onmessage = (event) => {
+            if (event.data && event.data.type === 'SYNC_STATE') {
+                updateUIState(event.data.state);
+            }
+        };
+
+        // ACCIONES DEL SISTEMA
+        async function lockStation(teamName) {
+            const timeStr = new Date().toLocaleTimeString();
+            const payload = {
+                isLocked: true,
+                winnerName: teamName,
+                completedAt: timeStr,
+                masterPassword: MASTER_PASSWORD,
+                adminPin: ADMIN_PIN
+            };
+
+            localStorage.setItem('itrally_winner_name', teamName);
+
+            if (isFirebaseAvailable && auth?.currentUser) {
+                const stationDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'rally_state', 'station_final');
+                await setDoc(stationDocRef, payload, { merge: true });
+            } else {
+                localStorage.setItem('itrally_local_state', JSON.stringify(payload));
+                updateUIState(payload);
+                broadcastChannel.postMessage({ type: 'SYNC_STATE', state: payload });
+            }
+        }
+
+        async function resetStationState(newPass = null, newPin = null) {
+            if (newPass) MASTER_PASSWORD = newPass;
+            if (newPin) ADMIN_PIN = newPin;
+            
+            document.getElementById('master-key-hint').textContent = MASTER_PASSWORD;
+
+            const payload = {
+                isLocked: false,
+                winnerName: null,
+                completedAt: null,
+                masterPassword: MASTER_PASSWORD,
+                adminPin: ADMIN_PIN
+            };
+
+            localStorage.removeItem('itrally_winner_name');
+
+            if (isFirebaseAvailable && auth?.currentUser) {
+                const stationDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'rally_state', 'station_final');
+                await setDoc(stationDocRef, payload);
+            } else {
+                localStorage.setItem('itrally_local_state', JSON.stringify(payload));
+                updateUIState(payload);
+                broadcastChannel.postMessage({ type: 'SYNC_STATE', state: payload });
+            }
+        }
+
+        // VALIDACIÓN DE FORMULARIO DE PARTICIPANTES
+        document.getElementById('rally-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const errorBox = document.getElementById('error-message');
+            const errorText = document.getElementById('error-text');
+            errorBox.classList.add('hidden');
+
+            const teamName = document.getElementById('team-name').value.trim();
+            const password = document.getElementById('final-password').value.trim();
+
+            if (!teamName || !password) {
+                errorText.textContent = "Por favor completen todos los campos.";
+                errorBox.classList.remove('hidden');
+                audioFX.playError();
+                return;
+            }
+
+            if (password.toUpperCase() === MASTER_PASSWORD.toUpperCase()) {
+                audioFX.playSuccess();
+                await lockStation(teamName);
+            } else {
+                audioFX.playError();
+                errorText.textContent = "❌ Contraseña Maestra incorrecta. Verificar sus pistas.";
+                errorBox.classList.remove('hidden');
+            }
+        });
+
+        // Toggle Mostrar/Ocultar Contraseña
+        document.getElementById('toggle-pwd-btn').addEventListener('click', () => {
+            const input = document.getElementById('final-password');
+            const icon = document.getElementById('pwd-eye-icon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'fas fa-eye-slash';
+            } else {
+                input.type = 'password';
+                icon.className = 'fas fa-eye';
+            }
+        });
+
+        // Botón de Toggle de Sonido
+        document.getElementById('sound-toggle-btn').addEventListener('click', () => {
+            audioFX.muted = !audioFX.muted;
+            const icon = document.getElementById('sound-icon');
+            if (audioFX.muted) {
+                icon.className = 'fas fa-volume-xmark text-gray-500';
+            } else {
+                icon.className = 'fas fa-volume-high text-acidGreen';
+                audioFX.playSuccess();
+            }
+        });
+
+        // ATAJOS DE TECLADO DISCRETOS PARA ABRIR MODAL DE ADMINISTRACIÓN
+        // Método 1: Ctrl + Shift + A
+        // Método 2: Presionar la tecla 'a' o 'A' 3 veces seguidas rápidamente (menos de 1 segundo)
+        let aKeyTapCount = 0;
+        let lastTapTime = 0;
+
+        document.addEventListener('keydown', (e) => {
+            // Método 1: Ctrl + Shift + A
+            if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+                e.preventDefault();
+                openAdminModal();
+                return;
+            }
+
+            // Método 2: Triple toque en la tecla 'a' fuera de inputs de texto
+            const isTyping = ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName);
+            if (!isTyping && (e.key === 'a' || e.key === 'A')) {
+                const currentTime = Date.now();
+                if (currentTime - lastTapTime < 450) {
+                    aKeyTapCount++;
+                } else {
+                    aKeyTapCount = 1;
+                }
+                lastTapTime = currentTime;
+
+                if (aKeyTapCount >= 3) {
+                    openAdminModal();
+                    aKeyTapCount = 0;
+                }
+            }
+        });
+
+        const adminModal = document.getElementById('admin-modal');
+        const adminMsg = document.getElementById('admin-msg');
+
+        function openAdminModal() {
+            adminModal.classList.remove('hidden');
+            document.getElementById('admin-new-password').value = MASTER_PASSWORD;
+            document.getElementById('admin-pin-input').value = '';
+            document.getElementById('admin-new-pin').value = '';
+            adminMsg.classList.add('hidden');
+            audioFX.playSuccess();
+        }
+
+        document.getElementById('close-admin-btn').addEventListener('click', () => {
+            adminModal.classList.add('hidden');
+        });
+
+        document.getElementById('reset-station-btn').addEventListener('click', async () => {
+            const pin = document.getElementById('admin-pin-input').value;
+            if (pin === ADMIN_PIN) {
+                await resetStationState();
+                adminMsg.textContent = "✓ Estación desbloqueada y reiniciada correctamente.";
+                adminMsg.className = "text-xs font-code mt-3 text-acidGreen block";
+                setTimeout(() => adminModal.classList.add('hidden'), 1200);
+            } else {
+                audioFX.playError();
+                adminMsg.textContent = "❌ PIN de Administrador incorrecto.";
+                adminMsg.className = "text-xs font-code mt-3 text-red-500 block";
+            }
+        });
+
+        document.getElementById('save-settings-btn').addEventListener('click', async () => {
+            const pin = document.getElementById('admin-pin-input').value;
+            const newPass = document.getElementById('admin-new-password').value.trim();
+            const newPin = document.getElementById('admin-new-pin').value.trim();
+
+            if (pin === ADMIN_PIN) {
+                await resetStationState(newPass || null, newPin || null);
+                adminMsg.textContent = "✓ Cambios de clave/PIN guardados con éxito.";
+                adminMsg.className = "text-xs font-code mt-3 text-acidGreen block";
+                setTimeout(() => adminModal.classList.add('hidden'), 1200);
+            } else {
+                audioFX.playError();
+                adminMsg.textContent = "❌ PIN de Administrador incorrecto.";
+                adminMsg.className = "text-xs font-code mt-3 text-red-500 block";
+            }
+        });
+
+        // INICIALIZAR AL CARGAR
+        window.addEventListener('DOMContentLoaded', () => {
+            setupFirebase();
+        });
+    </script>
+</body>
+</html>
