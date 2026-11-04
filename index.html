@@ -351,8 +351,8 @@
     <!-- SCRIPT DE LÓGICA Y SINCRONIZACIÓN -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
 
         // APP CONFIG & INITIAL VALUES
         let MASTER_PASSWORD = "CYBER_HALLOWEEN_2026";
@@ -548,19 +548,18 @@
                 };
 
                 const app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
+                db = getDatabase(app); // Usamos Realtime Database en lugar de Firestore
                 auth = getAuth(app);
 
-                // Autenticación anónima obligatoria para Firestore
                 await signInAnonymously(auth);
                 isFirebaseAvailable = true;
 
-                // Referencia al documento en Firestore
-                const stationDocRef = doc(db, 'rally_state', 'station_final');
+                // Referencia en Realtime Database
+                const stationRef = ref(db, 'rally_state/station_final');
 
-                onSnapshot(stationDocRef, (docSnap) => {
-                    if (docSnap.exists()) {
-                        const data = docSnap.data();
+                onValue(stationRef, (snapshot) => {
+                    const data = snapshot.val();
+                    if (data) {
                         if (data.masterPassword) {
                             MASTER_PASSWORD = data.masterPassword;
                             document.getElementById('master-key-hint').textContent = MASTER_PASSWORD;
@@ -571,7 +570,7 @@
                         updateUIState({ isLocked: false });
                     }
                 }, (error) => {
-                    console.warn("Error en Firestore snapshot, usando local:", error);
+                    console.warn("Error en base de datos, usando local:", error);
                     useLocalStateFallback();
                 });
 
@@ -658,8 +657,8 @@
             localStorage.setItem('itrally_winner_name', teamName);
 
             if (isFirebaseAvailable && auth?.currentUser) {
-                const stationDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'rally_state', 'station_final');
-                await setDoc(stationDocRef, payload, { merge: true });
+                const stationRef = ref(db, 'rally_state/station_final');
+                await set(stationRef, payload);
             } else {
                 localStorage.setItem('itrally_local_state', JSON.stringify(payload));
                 updateUIState(payload);
@@ -670,7 +669,7 @@
         async function resetStationState(newPass = null, newPin = null) {
             if (newPass) MASTER_PASSWORD = newPass;
             if (newPin) ADMIN_PIN = newPin;
-            
+
             document.getElementById('master-key-hint').textContent = MASTER_PASSWORD;
 
             const payload = {
@@ -684,8 +683,8 @@
             localStorage.removeItem('itrally_winner_name');
 
             if (isFirebaseAvailable && auth?.currentUser) {
-                const stationDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'rally_state', 'station_final');
-                await setDoc(stationDocRef, payload);
+                const stationRef = ref(db, 'rally_state/station_final');
+                await set(stationRef, payload);
             } else {
                 localStorage.setItem('itrally_local_state', JSON.stringify(payload));
                 updateUIState(payload);
