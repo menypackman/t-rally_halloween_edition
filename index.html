@@ -539,45 +539,89 @@
         // SINCRONIZACIÓN FIRESTORE / LOCALSTORAGE
         async function setupFirebase() {
             try {
-                if (typeof __firebase_config !== 'undefined' && __firebase_config) {
-                    const firebaseConfig = JSON.parse(__firebase_config);
-                    const app = initializeApp(firebaseConfig);
-                    db = getFirestore(app);
-                    auth = getAuth(app);
+                // PEGA AQUÍ TUS CREDENCIALES REALES DE FIREBASE
+                const firebaseConfig = {
+                    apiKey: "AIzaSyCB4XR0bXygSvZDut2KdsY-w1hW2qtuUCI",
+                    authDomain: "rally-halloween-2026.firebaseapp.com",
+                    databaseURL: "https://rally-halloween-2026-default-rtdb.firebaseio.com",
+                    projectId: "rally-halloween-2026",
+                    storageBucket: "rally-halloween-2026.firebasestorage.app",
+                    messagingSenderId: "852111153713",
+                    appId: "1:852111153713:web:d958c8ca3f9a13b9b6d310"
+                };
 
-                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                        await signInWithCustomToken(auth, __initial_auth_token);
-                    } else {
-                        await signInAnonymously(auth);
-                    }
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
 
-                    isFirebaseAvailable = true;
+                // Autenticación anónima obligatoria para Firestore
+                await signInAnonymously(auth);
+                isFirebaseAvailable = true;
 
-                    const stationDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'rally_state', 'station_final');
+                // Referencia al documento en Firestore
+                const stationDocRef = doc(db, 'rally_state', 'station_final');
 
-                    onSnapshot(stationDocRef, (docSnap) => {
-                        if (docSnap.exists()) {
-                            const data = docSnap.data();
-                            if (data.masterPassword) {
-                                MASTER_PASSWORD = data.masterPassword;
-                                document.getElementById('master-key-hint').textContent = MASTER_PASSWORD;
-                            }
-                            if (data.adminPin) ADMIN_PIN = data.adminPin;
-                            updateUIState(data);
-                        } else {
-                            updateUIState({ isLocked: false });
+                onSnapshot(stationDocRef, (docSnap) => {
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        if (data.masterPassword) {
+                            MASTER_PASSWORD = data.masterPassword;
+                            document.getElementById('master-key-hint').textContent = MASTER_PASSWORD;
                         }
-                    }, (error) => {
-                        console.warn("Error en Firestore snapshot, fallback local:", error);
-                        useLocalStateFallback();
-                    });
-                } else {
+                        if (data.adminPin) ADMIN_PIN = data.adminPin;
+                        updateUIState(data);
+                    } else {
+                        updateUIState({ isLocked: false });
+                    }
+                }, (error) => {
+                    console.warn("Error en Firestore snapshot, usando local:", error);
                     useLocalStateFallback();
-                }
+                });
+
             } catch (err) {
-                console.warn("Fallo al conectar con Firebase, usando LocalStorage fallback:", err);
+                console.warn("Fallo al conectar con Firebase, usando LocalStorage:", err);
                 useLocalStateFallback();
             }
+            // try {
+            //     if (typeof __firebase_config !== 'undefined' && __firebase_config) {
+            //         const firebaseConfig = JSON.parse(__firebase_config);
+            //         const app = initializeApp(firebaseConfig);
+            //         db = getFirestore(app);
+            //         auth = getAuth(app);
+
+            //         if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+            //             await signInWithCustomToken(auth, __initial_auth_token);
+            //         } else {
+            //             await signInAnonymously(auth);
+            //         }
+
+            //         isFirebaseAvailable = true;
+
+            //         const stationDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'rally_state', 'station_final');
+
+            //         onSnapshot(stationDocRef, (docSnap) => {
+            //             if (docSnap.exists()) {
+            //                 const data = docSnap.data();
+            //                 if (data.masterPassword) {
+            //                     MASTER_PASSWORD = data.masterPassword;
+            //                     document.getElementById('master-key-hint').textContent = MASTER_PASSWORD;
+            //                 }
+            //                 if (data.adminPin) ADMIN_PIN = data.adminPin;
+            //                 updateUIState(data);
+            //             } else {
+            //                 updateUIState({ isLocked: false });
+            //             }
+            //         }, (error) => {
+            //             console.warn("Error en Firestore snapshot, fallback local:", error);
+            //             useLocalStateFallback();
+            //         });
+            //     } else {
+            //         useLocalStateFallback();
+            //     }
+            // } catch (err) {
+            //     console.warn("Fallo al conectar con Firebase, usando LocalStorage fallback:", err);
+            //     useLocalStateFallback();
+            // }
         }
 
         function useLocalStateFallback() {
