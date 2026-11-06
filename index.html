@@ -609,7 +609,11 @@
             if (newPass) MASTER_PASSWORD = newPass;
             if (newPin) ADMIN_PIN = newPin;
             
-            document.getElementById('master-key-hint').textContent = MASTER_PASSWORD;
+            // Validación de seguridad para evitar errores si el elemento no está presente
+            const keyHintElement = document.getElementById('master-key-hint');
+            if (keyHintElement) {
+                keyHintElement.textContent = MASTER_PASSWORD;
+            }
 
             const payload = {
                 isLocked: false,
