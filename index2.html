@@ -47,6 +47,7 @@
             font-family: 'Rajdhani', sans-serif;
         }
 
+        /* Ambient Cyber & Halloween Grid Background */
         .bg-cyber-grid {
             background-image: 
                 radial-gradient(circle at 50% 25%, rgba(168, 85, 247, 0.18) 0%, transparent 65%),
@@ -57,6 +58,7 @@
             background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px, 40px 40px;
         }
 
+        /* Glowing Neon Text Effects */
         .neon-text-green {
             color: #39ff14;
             text-shadow: 0 0 10px rgba(57, 255, 20, 0.8), 0 0 25px rgba(57, 255, 20, 0.5), 0 0 40px rgba(57, 255, 20, 0.3);
@@ -72,6 +74,7 @@
             text-shadow: 0 0 10px rgba(168, 85, 247, 0.8), 0 0 25px rgba(168, 85, 247, 0.5);
         }
 
+        /* Border Glows */
         .neon-border-green {
             box-shadow: 0 0 20px rgba(57, 255, 20, 0.4), inset 0 0 15px rgba(57, 255, 20, 0.15);
             border-color: #39ff14;
@@ -87,6 +90,7 @@
             border-color: #ff0033;
         }
 
+        /* Spooky Canvas Overlay */
         #particle-canvas {
             position: fixed;
             top: 0;
@@ -97,6 +101,7 @@
             z-index: 1;
         }
 
+        /* Slime Drip Details */
         .slime-drip {
             position: relative;
         }
@@ -118,6 +123,7 @@
             50% { transform: translateY(10px) scaleY(1.3); }
         }
 
+        /* Pulse Animations */
         @keyframes pulseGlow {
             0%, 100% { opacity: 0.85; transform: scale(1); }
             50% { opacity: 1; transform: scale(1.02); }
@@ -127,6 +133,7 @@
             animation: pulseGlow 2.5s infinite ease-in-out;
         }
 
+        /* Custom Scrollbars */
         ::-webkit-scrollbar {
             width: 6px;
         }
@@ -141,27 +148,33 @@
 </head>
 <body class="bg-cyber-grid min-h-screen flex flex-col justify-between items-center relative p-4 md:p-6 select-none">
 
+    <!-- Canvas para murciélagos, código Matrix y polvo neón -->
     <canvas id="particle-canvas"></canvas>
 
+    <!-- Top Navigation Header -->
     <header class="w-full max-w-4xl flex justify-between items-center z-20 mb-4 px-2">
         <div class="flex items-center space-x-2 bg-black/70 border border-purple-500/40 rounded-full px-4 py-1.5 backdrop-blur-md">
             <span id="status-dot" class="w-3 h-3 rounded-full bg-acidGreen animate-ping"></span>
-            <span class="text-xs font-code text-gray-300 tracking-wider">ESTADO: <span id="system-status-text" class="text-acidGreen font-bold">ESTACIÓN ABIERTA</span></span>
+            <span class="text-xs font-code text-gray-300 tracking-wider">STATUS: <span id="system-status-text" class="text-acidGreen font-bold">ESTACIÓN ACTIVA</span></span>
         </div>
 
         <div class="flex items-center space-x-3">
+            <!-- Audio Toggle Button -->
             <button id="sound-toggle-btn" title="Activar/Desactivar sonido" class="bg-black/70 hover:bg-purple-900/40 border border-purple-500/50 text-purple-300 p-2.5 rounded-full transition-all text-sm flex items-center justify-center w-10 h-10 shadow-lg">
                 <i class="fas fa-volume-high" id="sound-icon"></i>
             </button>
         </div>
     </header>
 
+    <!-- MAIN INTERFACE -->
     <main class="w-full max-w-2xl z-20 my-auto flex flex-col items-center">
         
+        <!-- HEADER LOGO (Basado en la imagen de IT-RALLY HALLOWEEN EDITION) -->
         <div class="text-center mb-6 relative group">
             <div class="absolute -top-12 left-1/2 -translate-x-1/2 w-52 h-52 bg-purple-600/20 rounded-full blur-3xl pointer-events-none"></div>
 
             <div class="inline-block relative">
+                <!-- Iconos de Dron y Araña decorativos -->
                 <i class="fas fa-spider text-purple-400 text-2xl absolute -left-8 top-1 animate-bounce"></i>
                 <i class="fas fa-drone text-acidGreen text-xl absolute -right-9 -top-3 animate-pulse"></i>
 
@@ -183,9 +196,10 @@
             </div>
         </div>
 
-        <!-- ESTADO 1: FORMULARIO ACTIVO CON PODIO VISIBLE PARA TODOS -->
+        <!-- ESTADO 1: FORMULARIO ACTIVO -->
         <div id="challenge-card" class="w-full bg-black/85 border-2 border-purple-500/60 rounded-2xl p-6 md:p-8 backdrop-blur-xl neon-border-purple transition-all duration-500 relative overflow-hidden">
             
+            <!-- Adornos en esquinas -->
             <div class="absolute top-0 right-0 p-3 opacity-30 text-purple-400 pointer-events-none">
                 <i class="fas fa-spider-web text-4xl"></i>
             </div>
@@ -193,12 +207,13 @@
                 <i class="fas fa-microchip text-3xl"></i>
             </div>
 
-            <p class="text-gray-300 text-center text-sm md:text-base mb-4 font-tech font-semibold">
-                Ingresen la clave secreta. <br>
-                <span class="text-acidGreen font-bold">Lugares ocupados en el podio: <span id="spots-count">0</span>/3</span>
+            <p class="text-gray-300 text-center text-sm md:text-base mb-6 font-tech font-semibold">
+                Ingresen la clave secreta descubierta en las estaciones del rally. <br class="hidden sm:inline">
+                <span class="text-acidGreen font-bold">¡El primer equipo que valide la clave descifrará el núcleo y cerrará la estación!</span>
             </p>
 
-            <form id="rally-form" class="space-y-4 mb-6">
+            <form id="rally-form" class="space-y-5">
+                <!-- Nombre del Equipo -->
                 <div>
                     <label for="team-name" class="block text-xs font-code text-purple-300 uppercase mb-2 tracking-wider">
                         <i class="fas fa-users text-acidGreen mr-1.5"></i>Nombre del Equipo
@@ -210,6 +225,7 @@
                     </div>
                 </div>
 
+                <!-- Contraseña Final -->
                 <div>
                     <label for="final-password" class="block text-xs font-code text-purple-300 uppercase mb-2 tracking-wider">
                         <i class="fas fa-key text-hackerOrange mr-1.5"></i>Clave Maestra Final
@@ -223,11 +239,13 @@
                     </div>
                 </div>
 
+                <!-- Mensaje de Error -->
                 <div id="error-message" class="hidden bg-red-950/80 border border-red-500/60 text-red-300 text-xs md:text-sm font-code p-3 rounded-lg text-center flex items-center justify-center space-x-2">
                     <i class="fas fa-triangle-exclamation text-red-400 text-base"></i>
                     <span id="error-text">Contraseña incorrecta. Revisen sus pistas.</span>
                 </div>
 
+                <!-- Botón de Envío -->
                 <button type="submit" id="submit-btn" class="w-full group relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-cyber font-bold rounded-xl group bg-gradient-to-br from-acidGreen via-emerald-500 to-purple-600 group-hover:from-acidGreen group-hover:to-purple-500 hover:text-white text-black shadow-lg shadow-green-500/30 transition-all duration-300 active:scale-95">
                     <span class="w-full relative px-6 py-4 transition-all ease-in duration-75 bg-black rounded-[10px] group-hover:bg-opacity-0 text-acidGreen group-hover:text-black font-extrabold text-base md:text-lg tracking-wider flex items-center justify-center space-x-2">
                         <i class="fas fa-terminal"></i>
@@ -235,71 +253,63 @@
                     </span>
                 </button>
             </form>
-
-            <div class="border-t border-purple-900/50 pt-4 mt-2">
-                <h3 class="text-xs font-code text-purple-300 uppercase tracking-wider mb-2 text-center font-bold">🏆 PODIO EN TIEMPO REAL 🏆</h3>
-                <div id="live-podium-list" class="space-y-2 text-sm font-code">
-                    <!-- Se llena dinámicamente -->
-                </div>
-            </div>
         </div>
 
-        <!-- ESTADO 2: PANTALLA DE ÉXITO (PARA LOS 3 GANADORES) -->
+        <!-- ESTADO 2: PANTALLA DE VICTORIA -->
         <div id="success-card" class="hidden w-full bg-black/90 border-2 border-acidGreen rounded-2xl p-6 md:p-8 backdrop-blur-xl neon-border-green transition-all duration-500 text-center relative overflow-hidden animate-pulse-glow">
+            <div class="absolute -top-10 -right-10 text-acidGreen/10 text-9xl font-cyber select-none">WIN</div>
+            
             <div class="w-20 h-20 bg-acidGreen/20 border-2 border-acidGreen rounded-full flex items-center justify-center mx-auto mb-4 text-acidGreen text-3xl shadow-[0_0_20px_rgba(57,255,20,0.5)]">
-                <i class="fas fa-award animate-bounce"></i>
+                <i class="fas fa-trophy animate-bounce"></i>
             </div>
 
             <h2 class="font-cyber text-3xl md:text-4xl text-acidGreen font-black tracking-wide mb-2 neon-text-green uppercase">
-                🎉 ¡LOGRO DESBLOQUEADO! 🎉
+                🎉 ¡MISIÓN CUMPLIDA! 🎉
             </h2>
-            <p class="font-spooky text-2xl text-hackerOrange mb-4 tracking-widest">¡CONQUISTARON UN LUGAR EN EL PODIO!</p>
+            <p class="font-spooky text-2xl text-hackerOrange mb-4 tracking-widest">¡CONTRASEÑA DESCIFRADA CON ÉXITO!</p>
 
             <div class="bg-gray-950/90 border border-purple-500/40 rounded-xl p-4 mb-6">
-                <p class="text-xs font-code text-gray-400 uppercase tracking-widest mb-1">EQUIPO</p>
+                <p class="text-xs font-code text-gray-400 uppercase tracking-widest mb-1">EQUIPO GANADOR</p>
                 <p id="winner-name-display" class="font-cyber text-2xl md:text-3xl text-purple-300 font-bold neon-text-purple break-words">--</p>
-                <p id="winner-pos-display" class="text-xs font-code text-acidGreen mt-2 uppercase font-bold">POSICIÓN: --</p>
+                <p id="winner-time-display" class="text-xs font-code text-acidGreen mt-2">REGISTRADO: --:--:--</p>
             </div>
 
-            <div class="mt-4 text-left bg-black/60 border border-purple-500/30 rounded-xl p-4">
-                <h3 class="text-xs font-code text-purple-300 uppercase tracking-wider mb-3 text-center font-bold">🏆 PODIO OFICIAL 🏆</h3>
-                <div id="success-podium-list" class="space-y-2 text-sm font-code">
-                    <!-- Se llena dinámicamente -->
-                </div>
+            <div class="bg-purple-950/40 border border-purple-500/30 rounded-lg p-3 text-xs font-code text-purple-200">
+                <i class="fas fa-lock text-acidGreen mr-1"></i> La estación se ha cerrado en tiempo real para todos los equipos.
             </div>
         </div>
 
-        <!-- ESTADO 3: PANTALLA DE BLOQUEO PERMANENTE (PARA LOS DEMÁS EQUIPOS CUANDO YA HAY 3) -->
+        <!-- ESTADO 3: PANTALLA DE BLOQUEO PERMANENTE -->
         <div id="locked-card" class="hidden w-full bg-black/95 border-2 border-red-600 rounded-2xl p-6 md:p-8 backdrop-blur-xl neon-border-red transition-all duration-500 text-center relative overflow-hidden">
             <div class="w-20 h-20 bg-red-950/60 border-2 border-red-500 rounded-full flex items-center justify-center mx-auto mb-4 text-red-500 text-3xl shadow-[0_0_25px_rgba(255,0,51,0.7)] animate-pulse">
                 <i class="fas fa-lock text-red-500"></i>
             </div>
 
             <h2 class="font-cyber text-2xl md:text-4xl text-red-500 font-black tracking-wider mb-1 uppercase">
-                🔒 ESTACIÓN LLENA Y BLOQUEADA 🔒
+                🔒 ESTACIÓN BLOQUEADA 🔒
             </h2>
-            <p class="font-code text-xs text-red-400 mb-6 tracking-widest uppercase">LOS 3 LUGARES DEL PODIO HAN SIDO OCUPADOS</p>
+            <p class="font-code text-xs text-red-400 mb-6 tracking-widest uppercase">ACCESO DENEGADO - OTRO EQUIPO SE HA ADELANTADO</p>
 
-            <div class="bg-gray-950/90 border border-red-900/60 rounded-xl p-4 mb-6 text-left">
-                <p class="text-xs font-code text-gray-400 uppercase tracking-widest mb-3 text-center font-bold">🥇 🥈 🥉 PODIO OFICIAL</p>
-                <div id="final-podium-list" class="space-y-2 text-sm font-code">
-                    <!-- Se llena dinámicamente -->
-                </div>
+            <div class="bg-gray-950/90 border border-red-900/60 rounded-xl p-4 mb-6">
+                <p class="text-xs font-code text-gray-500 uppercase tracking-widest mb-1">COMPLETADO POR EL EQUIPO:</p>
+                <p id="locked-winner-display" class="font-cyber text-xl md:text-2xl text-hackerOrange font-bold neon-text-orange break-words">--</p>
+                <p id="locked-time-display" class="text-xs font-code text-gray-400 mt-2">TIEMPO DE REGISTRO: --</p>
             </div>
 
             <p class="text-sm font-tech text-gray-400">
-                Gracias a todos los equipos por participar en el T-RALLY HALLOWEEN EDITION.
+                Esta estación ha sido completada y cerrada. ¡Gracias por participar en el T-RALLY HALLOWEEN EDITION!
             </p>
         </div>
 
     </main>
 
+    <!-- FOOTER INFO -->
     <footer class="w-full max-w-4xl text-center z-20 mt-6 pt-4 border-t border-purple-900/30 flex flex-col sm:flex-row justify-center items-center text-xs text-gray-500 font-code">
-        <div>T-RALLY HALLOWEEN EDITION &copy; LMCHS 2026</div>
-        
+        <div>T-RALLY HALLOWEEN EDITION &copy; ITIID 2026</div>
+      
     </footer>
 
-    <!-- MODAL DE ADMINISTRACIÓN OCULTO -->
+    <!-- MODAL DE ADMINISTRACIÓN OCULTO (Accesible solo con combinación de teclas) -->
     <div id="admin-modal" class="hidden fixed inset-0 bg-black/95 backdrop-blur-md z-50 flex items-center justify-center p-4">
         <div class="bg-gray-950 border-2 border-purple-500 rounded-2xl max-w-md w-full p-6 text-center shadow-2xl relative neon-border-purple">
             <button id="close-admin-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white">
@@ -338,22 +348,26 @@
         </div>
     </div>
 
-    <!-- SCRIPT DE LÓGICA Y SINCRONIZACIÓN -->
+  
+        <!-- SCRIPT DE LÓGICA Y SINCRONIZACIÓN -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
 
+        // APP CONFIG & INITIAL VALUES
         let MASTER_PASSWORD = "CYBER_HALLOWEEN_2026";
         let ADMIN_PIN = "1234";
 
+        // CANAL DE SINCRONIZACIÓN EN TIEMPO REAL ENTRE PESTAÑAS (Broadcast Channel API)
         const broadcastChannel = new BroadcastChannel('itrally_realtime_sync');
 
+        // FIREBASE SETUP (Realtime Database)
         let db = null;
         let auth = null;
         let isFirebaseAvailable = false;
-        let latestCloudWinners = [];
 
+        // SINTETIZADOR DE AUDIO (Web Audio API)
         class CyberSoundEffects {
             constructor() {
                 this.ctx = null;
@@ -370,16 +384,20 @@
                 if (this.muted) return;
                 this.init();
                 const now = this.ctx.currentTime;
+                
                 const freqs = [523.25, 659.25, 783.99, 1046.50, 1318.51];
                 freqs.forEach((freq, idx) => {
                     const osc = this.ctx.createOscillator();
                     const gain = this.ctx.createGain();
                     osc.type = 'triangle';
                     osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+                    
                     gain.gain.setValueAtTime(0.2, now + idx * 0.08);
                     gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.3);
+                    
                     osc.connect(gain);
                     gain.connect(this.ctx.destination);
+                    
                     osc.start(now + idx * 0.08);
                     osc.stop(now + idx * 0.08 + 0.3);
                 });
@@ -391,13 +409,17 @@
                 const now = this.ctx.currentTime;
                 const osc = this.ctx.createOscillator();
                 const gain = this.ctx.createGain();
+                
                 osc.type = 'sawtooth';
                 osc.frequency.setValueAtTime(200, now);
                 osc.frequency.exponentialRampToValueAtTime(70, now + 0.3);
+                
                 gain.gain.setValueAtTime(0.3, now);
                 gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                
                 osc.connect(gain);
                 gain.connect(this.ctx.destination);
+                
                 osc.start(now);
                 osc.stop(now + 0.3);
             }
@@ -405,6 +427,7 @@
 
         const audioFX = new CyberSoundEffects();
 
+        // CANVAS DE PARTÍCULAS
         function initParticles() {
             const canvas = document.getElementById('particle-canvas');
             const ctx = canvas.getContext('2d');
@@ -428,100 +451,70 @@
 
             function animate() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
+
                 particles.forEach(p => {
                     p.y += p.speedY;
                     p.x += p.speedX;
+
                     if (p.y > canvas.height) {
                         p.y = -20;
                         p.x = Math.random() * canvas.width;
                     }
+
                     ctx.fillStyle = p.color;
                     ctx.font = `${11 + p.size * 3}px 'Fira Code', monospace`;
                     ctx.globalAlpha = 0.45;
                     ctx.fillText(p.char, p.x, p.y);
                 });
+
                 requestAnimationFrame(animate);
             }
             animate();
         }
         initParticles();
 
+        // ELEMENTOS DOM PARA CAMBIO DE ESTADOS
         const challengeCard = document.getElementById('challenge-card');
         const successCard = document.getElementById('success-card');
         const lockedCard = document.getElementById('locked-card');
         const systemStatusText = document.getElementById('system-status-text');
         const statusDot = document.getElementById('status-dot');
-        const spotsCount = document.getElementById('spots-count');
-
-        function generatePodiumHTML(winners = []) {
-            const medals = ['🥇 1er Lugar', '🥈 2do Lugar', '🥉 3er Lugar'];
-            return [0, 1, 2].map(index => {
-                const w = winners[index];
-                if (w) {
-                    return `<div class="flex justify-between items-center bg-gray-900/80 border border-purple-500/40 p-2 rounded-lg">
-                        <span class="text-hackerOrange font-bold">${medals[index]}</span>
-                        <span class="text-white font-cyber">${w.name}</span>
-                        <span class="text-xs text-gray-400">${w.time}</span>
-                    </div>`;
-                } else {
-                    return `<div class="flex justify-between items-center bg-black/40 border border-gray-800 p-2 rounded-lg text-gray-600">
-                        <span>${medals[index]}</span>
-                        <span class="italic">Disponible...</span>
-                        <span>--:--</span>
-                    </div>`;
-                }
-            }).join('');
-        }
 
         function updateUIState(stateData) {
-            const winners = stateData.winners || [];
-            latestCloudWinners = winners;
-            spotsCount.textContent = winners.length;
-
-            document.getElementById('live-podium-list').innerHTML = generatePodiumHTML(winners);
-
-            const myTeam = localStorage.getItem('itrally_my_team_name');
-            const hasMyTeamWon = winners.some(w => w.name === myTeam);
-
-            // CORRECCIÓN: Si este dispositivo pertenece a uno de los equipos ganadores, SIEMPRE ve su pantalla de éxito (Logro desbloqueado)
-            if (hasMyTeamWon) {
+            if (stateData && stateData.isLocked) {
                 challengeCard.classList.add('hidden');
-                lockedCard.classList.add('hidden');
-                successCard.classList.remove('hidden');
+                
+                const storedWinner = localStorage.getItem('itrally_winner_name');
+                if (storedWinner && storedWinner === stateData.winnerName) {
+                    successCard.classList.remove('hidden');
+                    lockedCard.classList.add('hidden');
+                    document.getElementById('winner-name-display').textContent = stateData.winnerName;
+                    document.getElementById('winner-time-display').textContent = `REGISTRADO: ${stateData.completedAt || 'AHORA'}`;
+                } else {
+                    lockedCard.classList.remove('hidden');
+                    successCard.classList.add('hidden');
+                    document.getElementById('locked-winner-display').textContent = stateData.winnerName;
+                    document.getElementById('locked-time-display').textContent = `TIEMPO REGISTRADO: ${stateData.completedAt || 'N/A'}`;
+                }
 
-                const myWin = winners.find(w => w.name === myTeam);
-                document.getElementById('winner-name-display').textContent = myWin.name;
-                document.getElementById('winner-pos-display').textContent = `POSICIÓN: ${myWin.position}`;
-                document.getElementById('success-podium-list').innerHTML = generatePodiumHTML(winners);
-
-                systemStatusText.textContent = `ESTACIÓN ABIERTA (${winners.length}/3 LUGARES)`;
-                systemStatusText.className = "text-acidGreen font-bold";
-                statusDot.className = "w-3 h-3 rounded-full bg-acidGreen animate-ping";
-            } else if (winners.length >= 3) {
-                // Si ya hay 3 ganadores y este equipo NO ganó, se bloquea permanentemente
-                challengeCard.classList.add('hidden');
-                successCard.classList.add('hidden');
-                lockedCard.classList.remove('hidden');
-
-                document.getElementById('final-podium-list').innerHTML = generatePodiumHTML(winners);
-
-                systemStatusText.textContent = "ESTACIÓN LLENA / BLOQUEADA";
+                systemStatusText.textContent = "ESTACIÓN BLOQUEADA";
                 systemStatusText.className = "text-red-500 font-bold";
                 statusDot.className = "w-3 h-3 rounded-full bg-red-500 animate-pulse";
             } else {
-                // Estación abierta para los demás equipos
                 challengeCard.classList.remove('hidden');
                 successCard.classList.add('hidden');
                 lockedCard.classList.add('hidden');
 
-                systemStatusText.textContent = `ESTACIÓN ABIERTA (${winners.length}/3 LUGARES)`;
+                systemStatusText.textContent = "ESTACIÓN ACTIVA";
                 systemStatusText.className = "text-acidGreen font-bold";
                 statusDot.className = "w-3 h-3 rounded-full bg-acidGreen animate-ping";
             }
         }
 
+        // CONEXIÓN A FIREBASE REALTIME DATABASE
         async function setupFirebase() {
             try {
+                // PEGA AQUÍ TUS CREDENCIALES REALES DE FIREBASE
                 const firebaseConfig = {
                     apiKey: "AIzaSyCB4XR0bXygSvZDut2KdsY-w1hW2qtuUCI",
                     authDomain: "rally-halloween-2026.firebaseapp.com",
@@ -546,13 +539,16 @@
                     if (data) {
                         if (data.masterPassword) {
                             MASTER_PASSWORD = data.masterPassword;
+                            // Validación de seguridad para evitar el error null
                             const keyHintElement = document.getElementById('master-key-hint');
-                            if (keyHintElement) keyHintElement.textContent = MASTER_PASSWORD;
+                            if (keyHintElement) {
+                                keyHintElement.textContent = MASTER_PASSWORD;
+                            }
                         }
                         if (data.adminPin) ADMIN_PIN = data.adminPin;
                         updateUIState(data);
                     } else {
-                        updateUIState({ winners: [], masterPassword: MASTER_PASSWORD, adminPin: ADMIN_PIN });
+                        updateUIState({ isLocked: false });
                     }
                 }, (error) => {
                     console.warn("Error en base de datos, usando local:", error);
@@ -572,13 +568,12 @@
                 const parsed = JSON.parse(savedState);
                 if (parsed.masterPassword) {
                     MASTER_PASSWORD = parsed.masterPassword;
-                    const keyHintElement = document.getElementById('master-key-hint');
-                    if (keyHintElement) keyHintElement.textContent = MASTER_PASSWORD;
+                    document.getElementById('master-key-hint').textContent = MASTER_PASSWORD;
                 }
                 if (parsed.adminPin) ADMIN_PIN = parsed.adminPin;
                 updateUIState(parsed);
             } else {
-                updateUIState({ winners: [], masterPassword: MASTER_PASSWORD, adminPin: ADMIN_PIN });
+                updateUIState({ isLocked: false });
             }
         }
 
@@ -588,32 +583,17 @@
             }
         };
 
-        async function registerWinner(teamName) {
+        async function lockStation(teamName) {
             const timeStr = new Date().toLocaleTimeString();
-            let currentWinners = [...latestCloudWinners];
-
-            if (currentWinners.some(w => w.name.toLowerCase() === teamName.toLowerCase())) {
-                return;
-            }
-
-            if (currentWinners.length >= 3) return;
-
-            const positions = ['1er Lugar', '2do Lugar', '3er Lugar'];
-            const newPosition = positions[currentWinners.length];
-
-            currentWinners.push({
-                name: teamName,
-                position: newPosition,
-                time: timeStr
-            });
-
-            localStorage.setItem('itrally_my_team_name', teamName);
-
             const payload = {
-                winners: currentWinners,
+                isLocked: true,
+                winnerName: teamName,
+                completedAt: timeStr,
                 masterPassword: MASTER_PASSWORD,
                 adminPin: ADMIN_PIN
             };
+
+            localStorage.setItem('itrally_winner_name', teamName);
 
             if (isFirebaseAvailable && auth?.currentUser) {
                 const stationRef = ref(db, 'rally_state/station_final');
@@ -629,16 +609,21 @@
             if (newPass) MASTER_PASSWORD = newPass;
             if (newPin) ADMIN_PIN = newPin;
             
+            // Validación de seguridad para evitar errores si el elemento no está presente
             const keyHintElement = document.getElementById('master-key-hint');
-            if (keyHintElement) keyHintElement.textContent = MASTER_PASSWORD;
-
-            localStorage.removeItem('itrally_my_team_name');
+            if (keyHintElement) {
+                keyHintElement.textContent = MASTER_PASSWORD;
+            }
 
             const payload = {
-                winners: [],
+                isLocked: false,
+                winnerName: null,
+                completedAt: null,
                 masterPassword: MASTER_PASSWORD,
                 adminPin: ADMIN_PIN
             };
+
+            localStorage.removeItem('itrally_winner_name');
 
             if (isFirebaseAvailable && auth?.currentUser) {
                 const stationRef = ref(db, 'rally_state/station_final');
@@ -650,6 +635,7 @@
             }
         }
 
+        // VALIDACIÓN DE FORMULARIO
         document.getElementById('rally-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const errorBox = document.getElementById('error-message');
@@ -661,14 +647,14 @@
 
             if (!teamName || !password) {
                 errorText.textContent = "Por favor completen todos los campos.";
-                errorBox.classList.add('hidden'); // Ajuste visual de error
+                errorBox.classList.remove('hidden');
                 audioFX.playError();
                 return;
             }
 
             if (password.toUpperCase() === MASTER_PASSWORD.toUpperCase()) {
                 audioFX.playSuccess();
-                await registerWinner(teamName);
+                await lockStation(teamName);
             } else {
                 audioFX.playError();
                 errorText.textContent = "❌ Contraseña Maestra incorrecta. Verificar sus pistas.";
@@ -676,6 +662,7 @@
             }
         });
 
+        // Toggle Mostrar/Ocultar Contraseña
         document.getElementById('toggle-pwd-btn').addEventListener('click', () => {
             const input = document.getElementById('final-password');
             const icon = document.getElementById('pwd-eye-icon');
@@ -688,6 +675,7 @@
             }
         });
 
+        // Botón de Toggle de Sonido
         document.getElementById('sound-toggle-btn').addEventListener('click', () => {
             audioFX.muted = !audioFX.muted;
             const icon = document.getElementById('sound-icon');
@@ -699,6 +687,7 @@
             }
         });
 
+        // ATAJOS DE TECLADO PARA ADMINISTRACIÓN
         let aKeyTapCount = 0;
         let lastTapTime = 0;
 
@@ -746,7 +735,7 @@
             const pin = document.getElementById('admin-pin-input').value;
             if (pin === ADMIN_PIN) {
                 await resetStationState();
-                adminMsg.textContent = "✓ Podio reiniciado correctamente.";
+                adminMsg.textContent = "✓ Estación desbloqueada y reiniciada correctamente.";
                 adminMsg.className = "text-xs font-code mt-3 text-acidGreen block";
                 setTimeout(() => adminModal.classList.add('hidden'), 1200);
             } else {
@@ -763,7 +752,7 @@
 
             if (pin === ADMIN_PIN) {
                 await resetStationState(newPass || null, newPin || null);
-                adminMsg.textContent = "✓ Configuración guardada con éxito.";
+                adminMsg.textContent = "✓ Cambios de clave/PIN guardados con éxito.";
                 adminMsg.className = "text-xs font-code mt-3 text-acidGreen block";
                 setTimeout(() => adminModal.classList.add('hidden'), 1200);
             } else {
